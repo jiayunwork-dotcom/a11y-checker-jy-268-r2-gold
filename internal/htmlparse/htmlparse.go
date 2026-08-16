@@ -75,10 +75,8 @@ func ParseString(s string) *Document {
 	return doc
 }
 
-var attrScratch []Attr
-
 func parseAttrs(s string) ([]Attr, map[string]string) {
-	attrScratch = attrScratch[:0]
+	var attrs []Attr
 	m := map[string]string{}
 	for _, am := range reAttr.FindAllStringSubmatch(s, -1) {
 		name := strings.ToLower(am[1])
@@ -90,12 +88,12 @@ func parseAttrs(s string) ([]Attr, map[string]string) {
 			val = am[4]
 		}
 		hasVal := am[2] != "" || am[3] != "" || am[4] != ""
-		attrScratch = append(attrScratch, Attr{Name: name, Value: val, HasValue: hasVal})
+		attrs = append(attrs, Attr{Name: name, Value: val, HasValue: hasVal})
 		if hasVal {
 			m[name] = val
 		}
 	}
-	return attrScratch, m
+	return attrs, m
 }
 
 // InnerText 返回第 idx 个标签到其匹配结束标签之间的纯文本（已去首尾空白）。
